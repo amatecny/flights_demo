@@ -21,7 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Holds the ui related stuff of a list of flights
+ * Holds the ui related stuff of a list of flights. Error is handled bys Snackbar
  * <p>
  * Created by amatecny on 25/09/2017
  */
