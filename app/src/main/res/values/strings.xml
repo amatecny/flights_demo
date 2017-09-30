@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Interesting Flights</string>
+    <string name="currency_eur">€</string>
+
+    <string name="flight_price">%s€</string>
+    <string name="flight_destination">%1$s, %2$s</string>
+    <string name="flight_route">%1$s -> %2$s, %3$s</string>
+    <string name="flight_details">Flight details:</string>
+    <string name="flight_departure">Departure</string>
+
+    <string name="flight_arrival">Arrival</string>
+    <string name="downloading_error">There was a problem downloading flight offers. Please make sure you have a working internet connection.</string>
+    <string name="retry_download">Retry</string>
+
+</resources>
