@@ -1,6 +1,5 @@
 package com.amatecny.interestingflights.persistence;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
@@ -31,15 +30,14 @@ class SharedPreferencesStorage extends Storage {
     private final SharedPreferences prefs;
 
     /**
-     * @param context to get preferences
-     * @param prefsName name of the file where preferences will be stored
+     * @param prefs shared preferences to use
      */
-    SharedPreferencesStorage( Context context, String prefsName ) {
+    SharedPreferencesStorage( SharedPreferences prefs ) {
         gson = new GsonBuilder()
                 .registerTypeAdapterFactory( AutoValueGsonConvertorFactory.create() )
                 .create();
 
-        prefs = context.getSharedPreferences( prefsName, Context.MODE_PRIVATE );
+        this.prefs = prefs;
     }
 
     @Override

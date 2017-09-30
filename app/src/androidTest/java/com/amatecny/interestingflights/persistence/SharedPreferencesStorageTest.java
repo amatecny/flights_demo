@@ -1,5 +1,6 @@
 package com.amatecny.interestingflights.persistence;
 
+import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
 import com.amatecny.interestingflights.flights.list.adapter.FlightListAdapterPresenterTest;
@@ -18,7 +19,8 @@ public class SharedPreferencesStorageTest {
 
     @Test
     public void storeAndRetrieveFlights() throws Exception {
-        SharedPreferencesStorage storage = new SharedPreferencesStorage( InstrumentationRegistry.getTargetContext(), "test" );
+        //alternatively create a mock of chain of objects - prefs, editor, ...
+        SharedPreferencesStorage storage = new SharedPreferencesStorage( InstrumentationRegistry.getTargetContext().getSharedPreferences( "test", Context.MODE_PRIVATE ) );
 
         List<Flight> flights = FlightListAdapterPresenterTest.prepareFlights();
         storage.storeFlights( flights );

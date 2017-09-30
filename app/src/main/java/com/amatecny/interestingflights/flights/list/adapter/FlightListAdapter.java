@@ -47,7 +47,7 @@ public class FlightListAdapter extends AbstractMvpRecyclerListAdapter<Flight, Fl
     /**
      * Single flight representation in a list/recycler
      */
-    public static class FlightItemViewHolder extends MvpViewHolder {
+    static class FlightItemViewHolder extends MvpViewHolder {
 
         @BindView(R.id.flight_detail_price_text) TextView priceText;
         @BindView(R.id.flight_detail_from_to_text) TextView routeText;
@@ -57,12 +57,12 @@ public class FlightListAdapter extends AbstractMvpRecyclerListAdapter<Flight, Fl
 
         @BindView(R.id.flight_detail_destination_image) ImageView destinationImage;
 
-        public FlightItemViewHolder( View itemView ) {
+        FlightItemViewHolder( View itemView ) {
             super( itemView );
             ButterKnife.bind( this, itemView );
         }
 
-        public void displayFlightDetails( String cityFrom, String cityTo, String countryTo, String price, String departureTime, String duration, String arrivalTime, String destinationImageUrl ) {
+        void displayFlightDetails( String cityFrom, String cityTo, String countryTo, String price, String departureTime, String duration, String arrivalTime, String destinationImageUrl ) {
             priceText.setText( String.format( getContext().getString( R.string.flight_price ), price ) );
             routeText.setText( String.format( getContext().getString( R.string.flight_route ), cityFrom, cityTo, countryTo ) );
             departureText.setText( departureTime );

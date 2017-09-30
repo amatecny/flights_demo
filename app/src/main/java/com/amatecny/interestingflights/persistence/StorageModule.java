@@ -18,6 +18,6 @@ public class StorageModule {
     @Provides
     @Singleton
     static Storage provideStorage( Context context) {
-        return new SharedPreferencesStorage( context, "flights" );
+        return new SharedPreferencesStorage( context.getSharedPreferences( "flights", Context.MODE_PRIVATE ) );
     }
 }

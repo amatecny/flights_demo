@@ -8,43 +8,45 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="flight_item_text_style">
+    <style name="flight_item_text_primary_style">
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginEnd">16dp</item>
-        <item name="android:layout_marginTop">8dp</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
-        <item name="android:textSize">22sp</item>
     </style>
 
-    <style name="flight_item_text_style_price" parent="flight_item_text_style">
+    <style name="flight_item_text_style_price" parent="flight_item_text_primary_style">
         <item name="android:textSize">28sp</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="flight_item_text_style_destination" parent="flight_item_text_primary_style">
+        <item name="android:textSize">22sp</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">end</item>
+    </style>
+
+    <style name="flight_item_text_secondary_style_title">
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorDarkGrey</item>
     </style>
 
     <style name="flight_item_text_secondary_style">
-        <item name="android:layout_marginStart">16dp</item>
-        <item name="android:layout_marginEnd">16dp</item>
-        <item name="android:layout_marginTop">8dp</item>
         <item name="android:ellipsize">end</item>
         <item name="android:maxLines">1</item>
-        <item name="android:textColor">@color/colorNormalText</item>
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="flight_item_text_secondary_style_aligned" parent="flight_item_text_secondary_style">
-        <item name="android:layout_marginStart">0dp</item>
-    </style>
-
-    <style name="flight_item_text_secondary_style_title" parent="flight_item_text_secondary_style">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/colorTitleText</item>
+    <style name="flight_item_text_secondary_style_grey" parent="flight_item_text_secondary_style">
+        <item name="android:textColor">@color/colorLightGrey</item>
     </style>
 
     <style name="flight_item_text_secondary_style_normal" parent="flight_item_text_secondary_style">
-        <item name="android:textColor">@color/colorTitleText</item>
-    </style>
-
-    <style name="flight_item_text_secondary_style_normal_aligned" parent="flight_item_text_secondary_style_aligned">
-        <item name="android:textColor">@color/colorTitleText</item>
+        <item name="android:textColor">@color/colorDarkGrey</item>
     </style>
 
 </resources>

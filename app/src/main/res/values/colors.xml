@@ -4,8 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorPurple">#a142f4</color>
-    <color name="colorLightGrey">#cccccc</color>
-    <color name="colorBackgroundGrey">#eeeeee</color>
-    <color name="colorNormalText">#aaaaaa</color>
-    <color name="colorTitleText">#333333</color>
+    <color name="colorBackgroundGrey">#dddddd</color>
+    <color name="colorLightGrey">#aaaaaa</color>
+    <color name="colorDarkGrey">#333333</color>
 </resources>

@@ -16,10 +16,10 @@ import java.util.Locale;
  */
 public class FlightListAdapterPresenter extends AbstractMvpRecyclerPresenter<Flight, FlightListAdapter, FlightListAdapter.FlightItemViewHolder> {
 
-    private static final DateFormat DETAIL_DATE_FORMAT = new SimpleDateFormat( "EEE, MMM dd, yyyy HH:mm a", Locale.US );
+    private static final DateFormat DETAIL_DATE_FORMAT = new SimpleDateFormat( "EEE, MMM dd  HH:mm a", Locale.US );
     private static final String IMAGE_HOST_URL_FORMAT = "https://images.kiwi.com/photos/600/%s.jpg";
 
-    public FlightListAdapterPresenter( @NonNull List<Flight> data, @NonNull FlightListAdapter adapterView ) {
+    FlightListAdapterPresenter( @NonNull List<Flight> data, @NonNull FlightListAdapter adapterView ) {
         super( data, adapterView );
     }
 
@@ -27,9 +27,7 @@ public class FlightListAdapterPresenter extends AbstractMvpRecyclerPresenter<Fli
     public void bindViewHolder( FlightListAdapter.FlightItemViewHolder holder, int position ) {
         Flight flight = getItem( position );
 
-        //times will in device default timeZone, as destination's time zone is not easily obtainable
-
-
+        //times will be in device's timeZone, otherwise we will need to know the timezones in destination and departure city
         String departureDateString = formatTime( flight.departureTime() );
         String arrivalDateString = formatTime( flight.arrivalTime() );
 

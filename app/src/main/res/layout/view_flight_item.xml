@@ -1,109 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:padding="8dp">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@android:color/white">
 
-    <RelativeLayout
-
+    <ImageView
+        android:id="@+id/flight_detail_destination_image"
         android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorBackgroundGrey"
+        android:layout_marginBottom="16dp"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/flight_detail_price_text"
+        style="@style/flight_item_text_style_price"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/white">
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/flight_detail_destination_image"
+        android:layout_marginEnd="8dp"
+        tools:text="240€"/>
 
-        <ImageView
-            android:id="@+id/flight_detail_destination_image"
-            android:layout_width="match_parent"
-            android:layout_height="240dp"
-            android:layout_alignParentTop="true"
-            android:background="@color/colorLightGrey"
-            android:scaleType="centerCrop"/>
+    <TextView
+        android:id="@+id/flight_detail_from_to_text"
+        style="@style/flight_item_text_style_destination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/flight_detail_price_text"
+        android:layout_below="@id/flight_detail_destination_image"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@id/flight_detail_price_text"
+        tools:text="Brno -> London"/>
 
+    <View
+        android:id="@+id/flight_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/flight_detail_from_to_text"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/colorPrimary"/>
 
-        <TextView
-            android:id="@+id/flight_detail_price_text"
-            style="@style/flight_item_text_style_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/flight_detail_destination_image"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:maxLines="1"
-            tools:text="240€"/>
+    <TextView
+        style="@style/flight_item_text_secondary_style_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/flight_separator"
+        android:layout_marginTop="8dp"
+        android:text="@string/flight_departure"/>
 
-        <TextView
-            android:id="@+id/flight_detail_from_to_text"
-            style="@style/flight_item_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/flight_detail_destination_image"
-            android:layout_alignBaseline="@id/flight_detail_price_text"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_toEndOf="@id/flight_detail_price_text"
-            android:gravity="end"
-            android:maxLines="2"
-            android:ellipsize="end"
-            tools:text="Brno -> London"/>
-
-        <View
-            android:id="@+id/flight_separator"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/flight_detail_from_to_text"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:background="@color/colorPrimary"/>
-
-        <TextView
-            android:id="@+id/flight_detail_departure_text"
-            style="@style/flight_item_text_secondary_style_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/flight_separator"
-            android:text="@string/flight_departure"/>
+    <LinearLayout
+        android:id="@+id/flight_detail_flight_times_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/flight_separator"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/flight_detail_departure_date_text"
-            style="@style/flight_item_text_secondary_style_normal_aligned"
+            style="@style/flight_item_text_secondary_style_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/flight_separator"
             tools:text="Tue, Sep 30 10:15AM"/>
 
         <TextView
             android:id="@+id/flight_detail_duration_date_text"
-            style="@style/flight_item_text_secondary_style_aligned"
+            style="@style/flight_item_text_secondary_style_grey"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@id/flight_detail_departure_date_text"
-            android:layout_below="@id/flight_detail_departure_text"
-            android:textColor="@color/colorNormalText"
+            android:layout_marginTop="8dp"
             tools:text="2h 30m"/>
 
         <TextView
-            android:id="@+id/flight_detail_arrival_text"
-            style="@style/flight_item_text_secondary_style_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/flight_detail_duration_date_text"
-            android:text="@string/flight_arrival"/>
-
-        <TextView
             android:id="@+id/flight_detail_arrival_date_text"
-            style="@style/flight_item_text_secondary_style_normal_aligned"
+            style="@style/flight_item_text_secondary_style_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/flight_detail_duration_date_text"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="8dp"
             tools:text="Tue Sep 30 10:45AM"/>
+    </LinearLayout>
 
-    </RelativeLayout>
-</FrameLayout>
+    <TextView
+        style="@style/flight_item_text_secondary_style_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/flight_detail_flight_times_layout"
+        android:layout_alignParentStart="true"
+        android:text="@string/flight_arrival"/>
+
+</RelativeLayout>
