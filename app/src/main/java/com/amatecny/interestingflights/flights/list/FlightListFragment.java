@@ -1,5 +1,6 @@
 package com.amatecny.interestingflights.flights.list;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
 
 /**
  * Holds the ui related stuff of a list of flights. Error is handled bys Snackbar
@@ -44,13 +46,15 @@ public class FlightListFragment extends MvpFragment<FlightListContract.Presenter
         View root = inflater.inflate( R.layout.fragment_flight_list, container, false );
         ButterKnife.bind( this, root );
 
+        //initiate the adapter before viewCreated is called on presenter
+        adapter = new FlightListAdapter( getContext(), null );
+
         return root;
     }
 
     @Override
     public void onViewCreated( View view, @Nullable Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
-        adapter = new FlightListAdapter( getContext(), null );
         recycler.setLayoutManager( new LinearLayoutManager( view.getContext() ) );
         recycler.setAdapter( adapter );
     }
@@ -75,5 +79,15 @@ public class FlightListFragment extends MvpFragment<FlightListContract.Presenter
         Snackbar.make( recycler, R.string.downloading_error, Snackbar.LENGTH_INDEFINITE )
                 .setAction( R.string.retry_download, view -> presenter.retryDownloadClicked() )
                 .show();
+    }
+
+    @Override
+    public void openIntent( Intent selectedFlightIntent ) {
+        startActivity( selectedFlightIntent );
+    }
+
+    @Override
+    public Observable<Integer> getItemClickObservable() {
+        return adapter.getOnClickObservable();
     }
 }

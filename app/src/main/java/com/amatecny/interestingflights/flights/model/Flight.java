@@ -16,8 +16,8 @@ import com.google.gson.annotations.SerializedName;
 @AutoValue
 public abstract class Flight implements Parcelable{
 
-    public static Flight create( String id, String mapIdfrom, String mapIdto, String flightDuration, String cityTo, Country countryTo, String cityFrom, long departureTime,long arrivalTime, String price ) {
-        return new AutoValue_Flight( id, mapIdfrom, mapIdto, flightDuration, cityTo, countryTo, cityFrom, departureTime, arrivalTime, price );
+    public static Flight create( String id, String mapIdfrom, String mapIdto, String flightDuration, String cityTo, Country countryTo, String cityFrom, Country countryFrom, long departureTime,long arrivalTime, String price ) {
+        return new AutoValue_Flight( id, mapIdfrom, mapIdto, flightDuration, cityTo, countryTo, cityFrom,countryFrom, departureTime, arrivalTime, price );
     }
 
     public static TypeAdapter<Flight> typeAdapter( Gson gson ) {
@@ -69,6 +69,13 @@ public abstract class Flight implements Parcelable{
     @NonNull
     @SerializedName("cityFrom")
     public abstract String cityFrom();
+
+    /**
+     * Departure country
+     */
+    @NonNull
+    @SerializedName("countryFrom")
+    public abstract Country countryFrom();
 
     /**
      * Time of the departure in millis since the start of epoch

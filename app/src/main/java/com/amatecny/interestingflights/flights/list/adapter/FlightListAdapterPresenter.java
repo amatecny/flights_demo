@@ -11,10 +11,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.subjects.PublishSubject;
+
 /**
  * Created by amatecny on 26/09/2017
  */
 public class FlightListAdapterPresenter extends AbstractMvpRecyclerPresenter<Flight, FlightListAdapter, FlightListAdapter.FlightItemViewHolder> {
+
+    private final PublishSubject<Integer> onClickPublishSubject = PublishSubject.create();
 
     private static final DateFormat DETAIL_DATE_FORMAT = new SimpleDateFormat( "EEE, MMM dd  HH:mm a", Locale.US );
     private static final String IMAGE_HOST_URL_FORMAT = "https://images.kiwi.com/photos/600/%s.jpg";
@@ -41,17 +45,22 @@ public class FlightListAdapterPresenter extends AbstractMvpRecyclerPresenter<Fli
                 flight.flightDuration(),
                 arrivalDateString,
                 String.format( IMAGE_HOST_URL_FORMAT, flight.mapIdto() ) );
-    }
 
-
-    private String formatTime( long timeInSeconds ) {
-        //convert to milliseconds first
-        Date departure = new Date( timeInSeconds * 1000 );
-        return DETAIL_DATE_FORMAT.format( departure );
+        holder.setOnClickListener( view -> onClickPublishSubject.onNext( position ) );
     }
 
     @Override
     public void unbindViewHolder( FlightListAdapter.FlightItemViewHolder holder ) {
         //do nothing
+    }
+
+    PublishSubject<Integer> getOnClickObservable() {
+        return onClickPublishSubject;
+    }
+
+    private String formatTime( long timeInSeconds ) {
+        //convert to milliseconds first
+        Date departure = new Date( timeInSeconds * 1000 );
+        return DETAIL_DATE_FORMAT.format( departure );
     }
 }

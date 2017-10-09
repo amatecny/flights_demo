@@ -33,4 +33,9 @@ public abstract class Storage {
      */
     public abstract long getLastUpdateTime();
 
+    /**
+     * Removes everything stored in storage
+     */
+    public abstract void clearStoredData();
+
 }

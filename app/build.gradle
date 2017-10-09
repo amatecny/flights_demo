@@ -91,6 +91,8 @@ dependencies {
 
     // interceptions for logging
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    //unicode to ascii transliteration
+    compile 'me.xuender:unidecode:0.0.7'
 
     //tests
     testCompile 'junit:junit:4.12'

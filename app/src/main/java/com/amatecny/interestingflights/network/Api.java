@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
 /**
@@ -21,6 +22,8 @@ public abstract class Api {
     /**
      * Get the list of flights based on provided parameters.
      * Start location would be situated in a 250km radius around Brno. With a destination set to anywhere
+     *
+     * Already does this job on {@link Schedulers#io() I/O } thread.
      *
      * @param firstDateOfFLight first date of a range in which to search for flights
      * @param lastDateOfFLight last date of a range in which to search for flights

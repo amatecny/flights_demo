@@ -1,5 +1,7 @@
 package com.amatecny.interestingflights.flights.list;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.amatecny.interestingflights.flights.model.Flight;
@@ -19,6 +21,9 @@ import java.util.Locale;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import me.xuender.unidecode.Unidecode;
+import timber.log.Timber;
 
 /**
  * Class responsible for loading interesting flights from storage/network api if stale.
@@ -26,6 +31,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
  * Created by amatecny on 25/09/2017
  */
 class FlightListPresenter extends BaseMvpPresenter<FlightListContract.View> implements FlightListContract.Presenter {
+
+    /**
+     * Designed to be formatted with 2 parameters - cityTo and cityFrom in format "city-country"
+     */
+    private static final String WEB_SEARCH_URL_BASE = "https://www.kiwi.com/us/search/%1$s/%2$s";
 
     // Create a DateFormatter for day comparison of timestamps
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat( "dd/MM/yyyy", Locale.US );
@@ -43,6 +53,10 @@ class FlightListPresenter extends BaseMvpPresenter<FlightListContract.View> impl
     @Override
     public void viewCreated() {
         getAndDisplayFlightOffers();
+
+        view.getItemClickObservable()
+                .compose( storeDisposable() )
+                .subscribe( this::onFlightItemClicked );
     }
 
     @Override
@@ -62,7 +76,13 @@ class FlightListPresenter extends BaseMvpPresenter<FlightListContract.View> impl
         Single<List<Flight>> upToDateFlights;
         if ( currentDate.equals( updateDate ) ) {
             //reuse what is stored
-            upToDateFlights = storage.retrieveFlights();
+            upToDateFlights = getStoredFlights()
+                    .subscribeOn( Schedulers.io() )
+                    .doOnError( throwable -> {
+                        Timber.d( throwable );
+                        //clear storage, as cached data appears to hold some invalid data, reload them next time from web
+                        storage.clearStoredData();
+                    } );
         } else {
             //download and process new flights
             //extra items to find different locations from previous call, little bit of salt
@@ -78,7 +98,7 @@ class FlightListPresenter extends BaseMvpPresenter<FlightListContract.View> impl
                         //signal the error and skip further processing
                         return Single.error( new RuntimeException( flightsResponse.message() ) );
                     } )
-                    .zipWith( storage.retrieveFlights(), ( candidateFlights, previousFlights ) -> {
+                    .zipWith( getStoredFlights(), ( candidateFlights, previousFlights ) -> {
                         List<Flight> newFlights = new ArrayList<>();
 
                         //start filtering individual items based on destination, find 5 flights not present in previous flights and send them down
@@ -115,6 +135,39 @@ class FlightListPresenter extends BaseMvpPresenter<FlightListContract.View> impl
                             view.hideProgressIndicator();
                             view.displayDownloadingFailed();
                         } );
+    }
+
+    private void onFlightItemClicked( int position ) {
+        getStoredFlights()
+                .subscribeOn( Schedulers.io() )
+                .map( flights -> flights.get( position ) )
+                .observeOn( AndroidSchedulers.mainThread() )
+                .compose( storeSingleDisposable() )
+                .subscribe( selectedFlight -> view.openIntent( createWebIntent( selectedFlight ) ) );
+    }
+
+    /**
+     *  Create an intent which will point to a page displaying the information about the selected flight
+     *
+     *  opens the url in browser or kiwi app?
+     */
+    private Intent createWebIntent( Flight selectedFlight ) {
+        //construct departure and destination identifiers "city-country"
+        String from = selectedFlight.cityFrom().toLowerCase() + "-" + selectedFlight.countryFrom().getName().toLowerCase();
+        String to = selectedFlight.cityTo().toLowerCase() + "-" + selectedFlight.countryTo().getName().toLowerCase();
+
+        //intent for e.g. browser
+        Intent intent = new Intent( Intent.ACTION_VIEW );
+
+        //Unidecode - transliterate all unicode chars to US-ASCII, e.g. 'ó' to 'o'
+        intent.setData( Uri.parse( String.format( Locale.US, WEB_SEARCH_URL_BASE, Unidecode.decode( from), Unidecode.decode( to) ) ) );
+
+        return intent;
+    }
+
+    @NonNull
+    private Single<List<Flight>> getStoredFlights() {
+        return storage.retrieveFlights();
     }
 
     /**

@@ -14,6 +14,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -46,10 +47,11 @@ public class FlightListAdapterPresenterTest {
         uut.bindViewHolder( mockHolder, 0 );
 
         verify( mockHolder ).displayFlightDetails( anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString() );
+        verify( mockHolder ).setOnClickListener( any() );
     }
 
     public static List<Flight> prepareFlights() {
-        Flight flight = Flight.create( "id", "mapIdFrom", "mapIdTo", "2h30m", "cityTo", Country.create( "CO", "Country" ), "cityFrom", 15000000, 15000001, "119" );
+        Flight flight = Flight.create( "id", "mapIdFrom", "mapIdTo", "2h30m", "cityTo", Country.create( "CO", "Country" ), "cityFrom", Country.create( "CO2", "Country2" ), 15000000, 15000001, "119" );
         List<Flight> mockFlights = new ArrayList<>();
         mockFlights.add( flight );
         return mockFlights;

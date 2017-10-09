@@ -16,6 +16,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.subjects.PublishSubject;
 
 /**
  * Adapter responsible for gluing {@link FlightListAdapterPresenter} and {@link FlightItemViewHolder}
@@ -44,6 +45,11 @@ public class FlightListAdapter extends AbstractMvpRecyclerListAdapter<Flight, Fl
         getAdapterPresenter().bindViewHolder( holder, position );
 
     }
+
+    public PublishSubject<Integer> getOnClickObservable() {
+        return getAdapterPresenter().getOnClickObservable();
+    }
+
     /**
      * Single flight representation in a list/recycler
      */
@@ -73,6 +79,10 @@ public class FlightListAdapter extends AbstractMvpRecyclerListAdapter<Flight, Fl
             Picasso.with( getContext() ).load( destinationImageUrl )
                     .placeholder( R.drawable.city_outline )
                     .into( destinationImage );
+        }
+
+        void setOnClickListener( View.OnClickListener onClickListener) {
+            itemView.setOnClickListener( onClickListener );
         }
     }
 

@@ -54,17 +54,23 @@ class SharedPreferencesStorage extends Storage {
     @NonNull
     @Override
     public Single<List<Flight>> retrieveFlights() {
-        //retrieve and deserialize
-        String storedFlightsJson = prefs.getString( KEY_STORED_FLIGHTS, "" );
+        return Single.defer( () -> {
+            //retrieve and deserialize
+            String storedFlightsJson = prefs.getString( KEY_STORED_FLIGHTS, "" );
 
-        Type type = new TypeToken<List<Flight>>() {}.getType();
-        List<Flight> flights = gson.fromJson( storedFlightsJson, type );
-
-        return Single.just( flights == null ? new ArrayList<>() : flights );
+            Type type = new TypeToken<List<Flight>>() {}.getType();
+            List<Flight> flights = gson.fromJson( storedFlightsJson, type );
+            return Single.just( flights == null ? new ArrayList<>() : flights );
+        } );
     }
 
     @Override
     public long getLastUpdateTime() {
         return prefs.getLong( KEY_LAST_UPDATE, 0L );
+    }
+
+    @Override
+    public void clearStoredData() {
+        prefs.edit().clear().apply();
     }
 }

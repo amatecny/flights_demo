@@ -1,9 +1,11 @@
 package com.amatecny.interestingflights.flights.list;
 
 
+import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 
 import com.amatecny.interestingflights.ImmediateSchedulersRule;
+import com.amatecny.interestingflights.flights.model.Country;
 import com.amatecny.interestingflights.flights.model.Flight;
 import com.amatecny.interestingflights.network.Api;
 import com.amatecny.interestingflights.network.model.FlightsResponse;
@@ -21,7 +23,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
@@ -77,6 +81,8 @@ public class FlightListPresenterTest {
 
         when( mockApi.downloadFlights( any(), any(), anyInt(), anyInt() ) ).thenReturn( Single.just( response ) );
 
+        when( mockView.getItemClickObservable() ).thenReturn( Observable.empty() );
+
         uut.viewCreated();
 
         verify( mockView ).displayLoadingIndicator();
@@ -115,6 +121,8 @@ public class FlightListPresenterTest {
         //our mocked response
         when( mockApi.downloadFlights( any(), any(), anyInt(), anyInt() ) ).thenReturn( Single.just( response ) );
 
+        when( mockView.getItemClickObservable() ).thenReturn( Observable.empty() );
+
         uut.viewCreated();
 
         //wait for async rx calls to finish
@@ -137,8 +145,10 @@ public class FlightListPresenterTest {
         when( mockStorage.retrieveFlights() ).thenReturn( Single.just( Collections.emptyList() ) );
 
         //do the request, but this time with exception
-        Response<FlightsResponse> response = Response.error( 400, ResponseBody.create( MediaType.parse("application/json; charset=utf-8"), "{}" ) );
+        Response<FlightsResponse> response = Response.error( 400, ResponseBody.create( MediaType.parse( "application/json; charset=utf-8" ), "{}" ) );
         when( mockApi.downloadFlights( any(), any(), anyInt(), anyInt() ) ).thenReturn( Single.just( response ) );
+
+        when( mockView.getItemClickObservable() ).thenReturn( Observable.empty() );
 
         uut.viewCreated();
 
@@ -159,6 +169,8 @@ public class FlightListPresenterTest {
         //flights from storage
         when( mockStorage.retrieveFlights() ).thenReturn( Single.just( mockFlights ) );
 
+        when( mockView.getItemClickObservable() ).thenReturn( Observable.empty() );
+
         uut.viewCreated();
 
         verify( mockView ).displayLoadingIndicator();
@@ -171,18 +183,66 @@ public class FlightListPresenterTest {
         verify( mockView ).displayFlights( mockFlights );
     }
 
+    @Test
+    public void testClickOnItemOpenIntent() {
+        List<Flight> mockFlights = prepareOrigMockFlights();
+
+        final int testedFlightIndex = 3;
+
+        //return now
+        when( mockStorage.getLastUpdateTime() ).thenReturn( Calendar.getInstance().getTimeInMillis() );
+        //flights from storage
+        when( mockStorage.retrieveFlights() ).thenReturn( Single.just( mockFlights ) );
+
+        when( mockView.getItemClickObservable() ).thenReturn( Observable.just( testedFlightIndex ) );
+
+        uut.viewCreated();
+
+        //wait for async rx calls to finish
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+
+        //verify that the intent's uri is correctly built
+        ArgumentCaptor<Intent> intentArgumentCaptor = ArgumentCaptor.forClass( Intent.class );
+        verify( mockView ).openIntent( intentArgumentCaptor.capture() );
+
+        String intentUrl = intentArgumentCaptor.getValue().getData().toString();
+        assertThat( intentUrl ).matches(
+                Pattern.compile( ".*cityfrom" + (testedFlightIndex + 1) +
+                        "-countryfrom" + (testedFlightIndex + 1) +
+                        "/cityto" + (testedFlightIndex + 1) +
+                        "-countryto" + (testedFlightIndex + 1) ) );
+    }
 
     private static List<Flight> prepareOrigMockFlights() {
         Flight mockFlight1 = mock( Flight.class );
         when( mockFlight1.cityTo() ).thenReturn( "cityTo1" );
+        when( mockFlight1.cityFrom() ).thenReturn( "cityFrom1" );
+        when( mockFlight1.countryTo() ).thenReturn( Country.create( "CodeTo1", "countryTo1" ) );
+        when( mockFlight1.countryFrom() ).thenReturn( Country.create( "CodeFrom1", "countryFrom1" ) );
+
         Flight mockFlight2 = mock( Flight.class );
         when( mockFlight2.cityTo() ).thenReturn( "cityTo2" );
+        when( mockFlight2.cityFrom() ).thenReturn( "cityFrom2" );
+        when( mockFlight2.countryTo() ).thenReturn( Country.create( "CodeTo2", "countryTo2" ) );
+        when( mockFlight2.countryFrom() ).thenReturn( Country.create( "CodeFrom2", "countryFrom2" ) );
+
         Flight mockFlight3 = mock( Flight.class );
         when( mockFlight3.cityTo() ).thenReturn( "cityTo3" );
+        when( mockFlight3.cityFrom() ).thenReturn( "cityFrom3" );
+        when( mockFlight3.countryTo() ).thenReturn( Country.create( "CodeTo3", "countryTo3" ) );
+        when( mockFlight3.countryFrom() ).thenReturn( Country.create( "CodeFrom3", "countryFrom3" ) );
+
         Flight mockFlight4 = mock( Flight.class );
         when( mockFlight4.cityTo() ).thenReturn( "cityTo4" );
+        when( mockFlight4.cityFrom() ).thenReturn( "cityFrom4" );
+        when( mockFlight4.countryTo() ).thenReturn( Country.create( "CodeTo4", "countryTo4" ) );
+        when( mockFlight4.countryFrom() ).thenReturn( Country.create( "CodeFrom4", "countryFrom4" ) );
+
         Flight mockFlight5 = mock( Flight.class );
         when( mockFlight5.cityTo() ).thenReturn( "cityTo5" );
+        when( mockFlight5.cityFrom() ).thenReturn( "cityFrom5" );
+        when( mockFlight5.countryTo() ).thenReturn( Country.create( "CodeTo5", "countryTo5" ) );
+        when( mockFlight5.countryFrom() ).thenReturn( Country.create( "CodeFrom5", "countryFrom5" ) );
 
         List<Flight> mockFlights = new ArrayList<>();
         mockFlights.add( mockFlight1 );
